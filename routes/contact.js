@@ -43,15 +43,12 @@ router.get("/:id", async function (req, res, next) {
 
     let contact = await contacts.findById(id);
 
-    //res.send(orders);
-
     return res.json(contact);
   } catch (error) {
     return res.send("Get ByID Failed", error);
   }
 });
 
-//put("/:id", async function (req, res, next)
 router.put("", async function (req, res, next) {
   try {
     let { id } = req.params;
@@ -107,7 +104,6 @@ router.delete("/:id", async function (req, res, next) {
 
     let contact = await contacts.findByIdAndDelete(id);
 
-    //return res.send(data);
     return res.json({ message: "Delete Success", contact: contact });
   } catch (error) {
     return res.send("Delete Failed", error);
