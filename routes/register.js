@@ -8,10 +8,11 @@ router.post("/", async function (req, res, next) {
     var register = new registers();
     register.firstname = data.firstname;
     register.lastname = data.lastname;
+    register.id_card = data.id_card;
     register.phone = data.phone;
     register.email = data.email;
     register.clinic_name = data.clinic_name;
-    register.age = data.age;
+    
     register.license_number = data.license_number;
 
     let save_register = await register.save();
@@ -53,10 +54,10 @@ router.put("", async function (req, res, next) {
 
     find_register.firstname = data.firstname;
     find_register.lastname = data.lastname;
+    find_register.id_card = data.id_card;
     find_register.phone = data.phone;
     find_register.email = data.email;
     find_register.clinic_name = data.clinic_name;
-    find_register.age = data.age;
     find_register.license_number = data.license_number;
 
     let show_register = await find_register.save();

@@ -4,10 +4,10 @@ const Register = new mongoose.Schema(
   {
     firstname: { type: String },
     lastname: { type: String },
+    id_card: { type: Number },
     phone: { type: String },
     email: { type: String },
     clinic_name: { type: String },
-    age: { type: Number },
     license_number: { type: String },
   },
   {
