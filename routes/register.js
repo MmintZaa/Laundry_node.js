@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const registers = require("../model/register");
 
-router.post("/", async function (req, res, next) {
+router.post("/create", async function (req, res, next) {
   try {
     var data = req.body;
     var check_register = await registers.findOne({
@@ -27,6 +27,7 @@ router.post("/", async function (req, res, next) {
       register.confirm_data = data.confirm_data;
       register.subscribe = data.subscribe;
 
+      console.log(data.confirm_data);
       if (data.confirm_data == true) {
         //true -> 2>1 , "a" == "a", true - false => true == true
         let save_register = await register.save();
@@ -41,7 +42,7 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-router.get("/", async function (req, res, next) {
+router.post("/get_all", async function (req, res, next) {
   try {
     let register = await registers.find();
 
@@ -51,7 +52,8 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-router.get("/:id", async function (req, res, next) {
+// router.get("/:id", async function (req, res, next)
+router.post("/get/:id", async function (req, res, next) {
   try {
     let { id } = req.params;
     let register = await registers.findById(id);
@@ -62,7 +64,7 @@ router.get("/:id", async function (req, res, next) {
   }
 });
 
-router.put("", async function (req, res, next) {
+router.post("/update", async function (req, res, next) {
   try {
     var data = req.body;
     var find_register = await registers.findOne({
@@ -97,7 +99,7 @@ router.put("", async function (req, res, next) {
   }
 });
 
-router.delete("/:id", async function (req, res, next) {
+router.post("/delete/:id", async function (req, res, next) {
   try {
     let { id } = req.params;
 
