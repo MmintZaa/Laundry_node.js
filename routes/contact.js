@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var contacts = require("../model/contact");
 
-router.post("/", async function (req, res, next) {
+router.post("/create", async function (req, res, next) {
   try {
     var data = req.body;
     // let contact = new contacts({
@@ -29,7 +29,7 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-router.get("/", async function (req, res, next) {
+router.post("/get_all", async function (req, res, next) {
   try {
     let contact = await contacts.find();
 
@@ -38,7 +38,7 @@ router.get("/", async function (req, res, next) {
     return res.send("Get All Failed", error);
   }
 });
-router.get("/:id", async function (req, res, next) {
+router.post("/get/:id", async function (req, res, next) {
   try {
     let { id } = req.params;
 
@@ -50,7 +50,7 @@ router.get("/:id", async function (req, res, next) {
   }
 });
 
-router.put("", async function (req, res, next) {
+router.post("/update", async function (req, res, next) {
   try {
     let { id } = req.params;
 
@@ -99,7 +99,7 @@ router.put("", async function (req, res, next) {
   }
 });
 
-router.delete("/:id", async function (req, res, next) {
+router.post("/delete/:id", async function (req, res, next) {
   try {
     let { id } = req.params;
 
