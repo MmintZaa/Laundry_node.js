@@ -81,12 +81,12 @@ router.post("/update", async function (req, res, next) {
       email: req.query.email,
     });
 
-    test_contact.name = data.name
-    test_contact.email = data.email
-    test_contact.subject = data.subject
-    test_contact.message = data.message
+    test_contact.name = data.name;
+    test_contact.email = data.email;
+    test_contact.subject = data.subject;
+    test_contact.message = data.message;
 
-    let show_contact = await test_contact.save()
+    let show_contact = await test_contact.save();
 
     //let contact = await contacts.findById(id);
 
@@ -108,6 +108,27 @@ router.post("/delete/:id", async function (req, res, next) {
     return res.json({ message: "Delete Success", contact: contact });
   } catch (error) {
     return res.send("Delete Failed", error);
+  }
+});
+
+router.post("/findemail", async function (req, res, next) {
+  try {
+    var {email} = req.body;
+    var data_contract = await contacts.findOne({
+      email: email,
+      // email: req.body.email,
+    });
+    
+    //console.log(data_contract);
+    if (!data_contract) {
+      return res.status(404).send({
+        message: "Data Not Found",
+      });
+    }
+
+    return res.json({ message: "Find Success", contact: data_contract });
+  } catch (error) {
+    return res.send("Find Failed", error);
   }
 });
 
