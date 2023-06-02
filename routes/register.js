@@ -5,37 +5,50 @@ const registers = require("../model/register");
 router.post("/create", async function (req, res, next) {
   try {
     var data = req.body;
-    var check_register = await registers.findOne({
-      id_card: data.id_card,
-      phone: data.phone,
-    });
+    // var check_register = await registers.findOne({
+    //   id_card: data.id_card,
+    // });
 
-    if (check_register) {
-      return res.send({
-        message: "Duplicate Register",
-      });
+    // if (check_register) {
+    //   return res.send({
+    //     message: "Duplicate Register",
+    //   });
+    // } else {
+    //   var register = new registers();
+    //   register.name = data.firstname;
+    //   register.id_card = data.id_card;
+    //   register.email = data.email;
+    //   register.clinic_name = data.clinic_name;
+    //   register.license_number = data.license_number;
+    //   register.objective = data.objective;
+    //   register.confirm_data = data.confirm_data;
+
+    //   console.log(data.confirm_data);
+    //   if (data.confirm_data == true) {
+    //     //true -> 2>1 , "a" == "a", true - false => true == true
+    //     let save_register = await register.save();
+    //     return res.status(200).json(save_register);
+    //   } else {
+    //     // false, "", 0, null , undefined
+    //     return res.status(400).send("Failed");
+    //   }
+    // }
+    var register = new registers();
+    register.name = data.name;
+    register.id_card = data.id_card;
+    register.email = data.email;
+    register.clinic_name = data.clinic_name;
+    register.license_number = data.license_number;
+    register.objective = data.objective;
+    register.confirm_data = data.confirm_data;
+
+    if (data.confirm_data) {
+      //true -> 2>1 , "a" == "a", true - false => true == true
+      let save_register = await register.save();
+      return res.status(200).json(save_register);
     } else {
-      var register = new registers();
-      register.firstname = data.firstname;
-      register.lastname = data.lastname;
-      register.id_card = data.id_card;
-      register.phone = data.phone;
-      register.email = data.email;
-      register.clinic_name = data.clinic_name;
-      register.license_number = data.license_number;
-
-      register.confirm_data = data.confirm_data;
-      register.subscribe = data.subscribe;
-
-      console.log(data.confirm_data);
-      if (data.confirm_data == true) {
-        //true -> 2>1 , "a" == "a", true - false => true == true
-        let save_register = await register.save();
-        return res.status(200).json(save_register);
-      } else {
-        // false, "", 0, null , undefined
-        return res.status(400).send("Failed");
-      }
+      // false, "", 0, null , undefined
+      return res.status(400).send("Failed");
     }
   } catch (error) {
     return res.send("Create Failed", error);
