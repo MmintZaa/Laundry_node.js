@@ -4,8 +4,10 @@ const Contact = new mongoose.Schema(
   {
     name: { type: String },
     email: { type: String },
+    phone: { type: String },
     subject: { type: String },
-    message: { type: String }
+    message: { type: String },
+    confirm_contact: { type: Boolean },
   },
   {
     timestamps: true,

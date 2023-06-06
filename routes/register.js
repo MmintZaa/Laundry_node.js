@@ -1,10 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const registers = require("../model/register");
+var validator = require("validator");
 
 router.post("/create", async function (req, res, next) {
   try {
     var data = req.body;
+    // ========= Check id_card ===========================
     // var check_register = await registers.findOne({
     //   id_card: data.id_card,
     // });
@@ -15,16 +17,63 @@ router.post("/create", async function (req, res, next) {
     //   });
     // } else {
     //   var register = new registers();
-    //   register.name = data.firstname;
+    //   register.name = data.name;
     //   register.id_card = data.id_card;
     //   register.email = data.email;
     //   register.clinic_name = data.clinic_name;
     //   register.license_number = data.license_number;
     //   register.objective = data.objective;
     //   register.confirm_data = data.confirm_data;
+    //   if (!validator.contains(data.name)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid name",
+    //     });
+    //   }
+
+    //   if (!validator.contains(data.id_card)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid id_card",
+    //     });
+    //   }
+
+    //   if (!validator.isEmail(data.email)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid email",
+    //     });
+    //   }
+
+    //   if (!validator.contains(data.clinic_name)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid clinic_name",
+    //     });
+    //   }
+
+    //   if (!validator.contains(data.license_number)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid license_number",
+    //     });
+    //   }
+
+    //   if (!validator.contains(data.objective)) {
+    //     return res.json({
+    //       status: "fail",
+    //       status_code: "400",
+    //       message: "invalid objective",
+    //     });
+    //   }
 
     //   console.log(data.confirm_data);
-    //   if (data.confirm_data == true) {
+    //   if (data.confirm_data) {
     //     //true -> 2>1 , "a" == "a", true - false => true == true
     //     let save_register = await register.save();
     //     return res.status(200).json(save_register);
@@ -33,6 +82,7 @@ router.post("/create", async function (req, res, next) {
     //     return res.status(400).send("Failed");
     //   }
     // }
+    // ==========================================================
     var register = new registers();
     register.name = data.name;
     register.id_card = data.id_card;
@@ -41,6 +91,49 @@ router.post("/create", async function (req, res, next) {
     register.license_number = data.license_number;
     register.objective = data.objective;
     register.confirm_data = data.confirm_data;
+
+    if (!validator.contains(data.name)) {
+      return res.json({
+        status: "fail create register create register",
+        status_code: "400",
+        message: "invalid name",
+      });
+    }
+    if (!validator.contains(data.id_card)) {
+      return res.json({
+        status: "fail create register",
+        status_code: "400",
+        message: "invalid id_card",
+      });
+    }
+    if (!validator.isEmail(data.email)) {
+      return res.json({
+        status: "fail create register",
+        status_code: "400",
+        message: "invalid email",
+      });
+    }
+    if (!validator.contains(data.clinic_name)) {
+      return res.json({
+        status: "fail create register",
+        status_code: "400",
+        message: "invalid clinic_name",
+      });
+    }
+    if (!validator.contains(data.license_number)) {
+      return res.json({
+        status: "fail create register",
+        status_code: "400",
+        message: "invalid license_number",
+      });
+    }
+    if (!validator.contains(data.objective)) {
+      return res.json({
+        status: "fail create register",
+        status_code: "400",
+        message: "invalid objective",
+      });
+    }
 
     if (data.confirm_data) {
       //true -> 2>1 , "a" == "a", true - false => true == true
@@ -51,7 +144,7 @@ router.post("/create", async function (req, res, next) {
       return res.status(400).send("Failed");
     }
   } catch (error) {
-    return res.send("Create Failed", error);
+    return res.send("Create Register Failed", error);
   }
 });
 
