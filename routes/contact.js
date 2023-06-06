@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var contacts = require("../model/contact");
+var validator = require("validator");
 
 router.post("/create", async function (req, res, next) {
   try {
@@ -16,16 +17,55 @@ router.post("/create", async function (req, res, next) {
     var contact = new contacts();
     contact.name = data.name;
     contact.email = data.email;
+    contact.phone = data.phone;
     contact.subject = data.subject;
     contact.message = data.message;
+    contact.confirm_contact = data.confirm_contact;
 
-    let save_contact = await contact.save();
+    if (!validator.contains(data.name)) {
+      return res.json({
+        status: "fail create contact",
+        status_code: "400",
+        message: "invalid name",
+      });
+    }
+    if (!validator.isEmail(data.email)) {
+      return res.json({
+        status: "fail create contact",
+        status_code: "400",
+        message: "invalid email",
+      });
+    }
+    if (!validator.contains(data.phone)) {
+      return res.json({
+        status: "fail create contact",
+        status_code: "400",
+        message: "invalid phone",
+      });
+    }
+    if (!validator.contains(data.subject)) {
+      return res.json({
+        status: "fail create contact",
+        status_code: "400",
+        message: "invalid subject",
+      });
+    }
+    if (!validator.contains(data.message)) {
+      return res.json({
+        status: "fail create contact",
+        status_code: "400",
+        message: "invalid message",
+      });
+    }
 
-    //res.send(data);
-
-    return res.status(200).json(save_contact);
+    if (data.confirm_contact) {
+      let save_contact = await contact.save();
+      return res.status(200).json(save_contact);
+    } else {
+      return res.status(400).send("Failed");
+    }
   } catch (error) {
-    return res.send("Create Failed", error);
+    return res.send("Create Contact Failed", error);
   }
 });
 
@@ -113,12 +153,12 @@ router.post("/delete/:id", async function (req, res, next) {
 
 router.post("/findemail", async function (req, res, next) {
   try {
-    var {email} = req.body;
+    var { email } = req.body;
     var data_contract = await contacts.findOne({
       email: email,
       // email: req.body.email,
     });
-    
+
     //console.log(data_contract);
     if (!data_contract) {
       return res.status(404).send({
