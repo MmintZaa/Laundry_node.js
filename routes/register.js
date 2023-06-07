@@ -93,45 +93,40 @@ router.post("/create", async function (req, res, next) {
     register.confirm_data = data.confirm_data;
 
     if (!validator.contains(data.name)) {
-      return res.json({
-        status: "fail create register create register",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid name",
+        message: "invalid name to create register",
       });
     }
     if (!validator.contains(data.id_card)) {
-      return res.json({
-        status: "fail create register",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid id_card",
+        message: "invalid id card to create register",
       });
     }
     if (!validator.isEmail(data.email)) {
-      return res.json({
-        status: "fail create register",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid email",
+        message: "invalid email to create register",
       });
     }
     if (!validator.contains(data.clinic_name)) {
-      return res.json({
-        status: "fail create register",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid clinic_name",
+        message: "invalid clinic name to create register",
       });
     }
     if (!validator.contains(data.license_number)) {
-      return res.json({
-        status: "fail create register",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid license_number",
+        message: "invalid license number to create register",
       });
     }
     if (!validator.contains(data.objective)) {
-      return res.json({
-        status: "fail create register",
+      return res.status(400).json({
+        
         status_code: "400",
-        message: "invalid objective",
+        message: "invalid objective to create register",
       });
     }
 
@@ -194,7 +189,7 @@ router.post("/update", async function (req, res, next) {
 
       if (find_register.confirm_data) {
         let show_register = await find_register.save();
-        return res.json({ message: "Update Success", register: show_register });
+        return res.status(400).json({ message: "Update Success", register: show_register });
       } else {
         return res.status(400).json("Update Failed");
       }

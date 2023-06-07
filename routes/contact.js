@@ -23,38 +23,33 @@ router.post("/create", async function (req, res, next) {
     contact.confirm_contact = data.confirm_contact;
 
     if (!validator.contains(data.name)) {
-      return res.json({
-        status: "fail create contact",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid name",
+        message: "invalid name to create contact",
       });
     }
     if (!validator.isEmail(data.email)) {
-      return res.json({
-        status: "fail create contact",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid email",
+        message: "invalid email to create contact",
       });
     }
     if (!validator.contains(data.phone)) {
-      return res.json({
-        status: "fail create contact",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid phone",
+        message: "invalid phone to create contact",
       });
     }
     if (!validator.contains(data.subject)) {
-      return res.json({
-        status: "fail create contact",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid subject",
+        message: "invalid subject to create contact",
       });
     }
     if (!validator.contains(data.message)) {
-      return res.json({
-        status: "fail create contact",
+      return res.status(400).json({
         status_code: "400",
-        message: "invalid message",
+        message: "invalid message to create contact",
       });
     }
 
@@ -78,6 +73,7 @@ router.post("/get_all", async function (req, res, next) {
     return res.send("Get All Failed", error);
   }
 });
+
 router.post("/get/:id", async function (req, res, next) {
   try {
     let { id } = req.params;
