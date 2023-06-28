@@ -1,7 +1,6 @@
 global.express = require('express')
 global.bodyParser = require('body-parser')
 global.GLOBAL_VALUE = process.env;
-// global.jwt = require('jsonwebtoken');
 global.cors = require('cors');
 global.mongoose = require('mongoose');
 global.Schema = mongoose.Schema
@@ -35,19 +34,17 @@ if (GLOBAL_VALUE.NODE_ENV == 'production') {
         path: '.env'
     })
 }
-// const mongo_url = 'mongodb://'  + GLOBAL_VALUE.MG_HOST + ':' + GLOBAL_VALUE.MG_PORT + '/' + GLOBAL_VALUE.MG_NAME
 
 const mongo_url = GLOBAL_VALUE.MG_CONNECT
-// console.log(mongo_url)
 
 mongoose.connect(mongo_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    // useCreateIndex: true,
-    // useFindAndModify: false
+    // authSource: 'admin'
 }).then(() => {
     console.log("[success] task 2 connected to the mongo database ")
 }).catch((error) => {
+    console.log(error)
     console.log("[failed] task 2 " + error);
     process.exit();
 })

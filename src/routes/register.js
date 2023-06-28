@@ -8,7 +8,7 @@ const helpidcard = require("../helper/validate_IDcard");
 const { verifyToken } = require("../middleware/authen");
 
 // router.post("/create", verifyToken, async function (req, res, next)
-router.post("/create",verifyToken, async function (req, res, next) {
+router.post("/create", async function (req, res, next) {
   try {
     let data = req.body;
     // ========= Check id_card ===========================
@@ -148,7 +148,7 @@ router.post("/create",verifyToken, async function (req, res, next) {
       return res.status(400).send("Failed");
     }
   } catch (error) {
-    return res.send("Create Register Failed", error);
+    return res.status(500).send({message: "Create Register Failed", error: error.message });
   }
 });
 

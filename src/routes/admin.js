@@ -25,7 +25,7 @@ router.post("/createadmin", async function (req, res) {
       message: "Creat Admin Success",
     });
   } catch (error) {
-    return res.send("Create Admin Failed", error);
+    return res.status(500).send({message: "Create Admin Failed", error: error.message });
   }
 });
 

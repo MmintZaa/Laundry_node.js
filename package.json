@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app.js",
-    "devserve": "set NODE_ENV=''&&nodemon ./app.js"
+    "dev": "set NODE_ENV='' && nodemon ./src/app.js"
   },
   "dependencies": {
     "axios": "^0.27.2",

@@ -1,5 +1,6 @@
 require('./config/config')
 
+const morgan = require('morgan');
 const adminRouter = require('./routes/admin');
 const registerRouter = require('./routes/register');
 // const adminRouter = require('./router/admin');
@@ -28,6 +29,8 @@ app.use(
     limit: '200mb'
   })
 );
+
+app.use(morgan('dev'))
 
 app.use('/admin', adminRouter);
 app.use('/register', registerRouter);
