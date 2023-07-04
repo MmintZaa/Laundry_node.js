@@ -1,45 +1,29 @@
-require('./config/config')
+require("dotenv/config") //ดึงไฟล์ env มาให้
+const {connectMongo} = require("./db/mongo")
+const express = require('express');
+const router = require('./routers');
+const morgan = require("morgan");
+const app = express();
 
-const morgan = require('morgan');
-const adminRouter = require('./routes/admin');
-const registerRouter = require('./routes/register');
-// const adminRouter = require('./router/admin');
 
-var app = express();
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(cors({
-  origin: "*",
-}));
-app.use(express.json({
-  limit: '200mb'
-}));
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-    limit: '200mb'
-  })
-);
-app.use(
-  bodyParser.json({
-    extended: true,
-    limit: '200mb'
-  })
-);
-
-app.use(morgan('dev'))
-
-app.use('/admin', adminRouter);
-app.use('/register', registerRouter);
-// app.use('/admin', adminRouter);
-
-console.log('[success] task 1 start service port : ' + GLOBAL_VALUE.NODE_PORT)
-const server = app.listen(GLOBAL_VALUE.NODE_PORT).on('error', err => {
-  console.log(err)
+app.use(express.json());
+app.use(morgan('dev'));
+app.use('/api', router);
+app.use('', (req, res) => {
+    res.send('Hello this is my API');
 })
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    res.status(500).json({
+        message: err.message ?? "Internal Error",
+        additionValue: err,
+    })
+})
 
-module.exports = server;
+// port 3000 is our machine port you can use other port
+app.listen(3000, async () => {
+    console.log(process.env.MONGO_URL)
+    await connectMongo()
+    console.info('Hello This is my server run on: http://localhost:3000')
+})
