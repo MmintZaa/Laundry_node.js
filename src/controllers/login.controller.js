@@ -1,48 +1,37 @@
 const { Router } = require("express");
 const verifyToken = require("../middlewares/verifyToken.middleware");
-const authService = require("../services/login.service");
+const loginService = require("../services/login.service");
 const {validationEmail, validationUsername} = require("../middlewares/validations/registerForm.validation");
 const { validationResult } = require("express-validator");
-const authController = Router();
+const loginController = Router();
 
 
-authController.post("/login", async (req, res, next) => {
+loginController.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const result = await authService.login(username, password);
+    const result = await loginService.login(username, password);
     res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 });
 
-authController.post("/register", validationEmail(), validationUsername(),
-  async (req, res, next) => {
-    try {
-      const validateResult = validationResult(req);
-      if (!validateResult.isEmpty()) {
-        return res.status(400).json({
-          message: "validation fail",
-          additionValue: validateResult.array(),
-        });
-      }
-      console.log(validateResult);
-      const payload = req.body;
-      const result = await authService.register(payload);
-      res.status(200).json(result);
-    } catch (error) {
-      if (error.code === 11000) {
-        next(new Error("Duplicate Username"));
-      } else {
-        next(error);
-      }
-    }
-  }
-);
+loginController.post("/create_login", async (req, res, next) => {
+  try {
+    const { username, password } = req.body; 
 
-authController.get("/verify-token", verifyToken, (req, res) => {
+    const result = await loginService.create_login(username, password);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
+loginController.get("/verify-token", verifyToken, (req, res) => {
   res.status(200).json(req.user);
 });
 
 
-module.exports = authController;
+module.exports = loginController;
