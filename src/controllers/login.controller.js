@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const verifyToken = require("../middlewares/verifyToken.middleware");
-const authService = require("../services/auth.service");
+const authService = require("../services/login.service");
 const {validationEmail, validationUsername} = require("../middlewares/validations/registerForm.validation");
 const { validationResult } = require("express-validator");
 const authController = Router();
