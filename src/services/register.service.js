@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 let validator = require("validator");
+const helpidcard = require("../helper/validate_IDcard");
 
 const register = async (payload) => {
     try {
@@ -93,29 +94,7 @@ const register = async (payload) => {
 
       let idCardNumber = data.id_card;
 
-     // function validateThaiIdCard(idCardNumber) {
-     
-      //   // คำนวณเลขความสามารถของหมายเลขบัตรประชาชน
-      //   let sum = 0;
-      //   for (let i = 0; i < 12; i++) {
-      //     sum += parseInt(idCardNumber.charAt(i)) * (13 - i);
-      //   }
-      
-      //   // คำนวณเลขตัวหลักที่ 13 (เลขความสามารถ)
-      //   const checkDigit = (11 - (sum % 11)) % 10;
-      
-      //   // เปรียบเทียบเลขตัวหลักที่ 13 กับเลขความสามารถจริง
-      //   return checkDigit === parseInt(idCardNumber.charAt(12));
-      // }
-
-      // const isValid = validateThaiIdCard(idCardNumber);
-
-      // if (!isValid) {
-      // throw new Error(
-      //   "หมายเลขบัตรประชาชนไม่ถูกต้อง"
-      // );
-      // }
-
+   
 
       //email
 
@@ -145,7 +124,7 @@ const register = async (payload) => {
       function emaillIsValids(email) {       
        // เช็คว่า email ไม่มีช่องว่างหรืออักขระพิเศษ
        const hasWhitespace = /\s/.test(email);
-       const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(email);
+       const hasSpecialCharacters = /[!#$%^&*(),?":{}|<>]/.test(email);
         return  !hasWhitespace && !hasSpecialCharacters;
       }
 
