@@ -16,19 +16,6 @@ loginController.post("/login", async (req, res, next) => {
   }
 });
 
-loginController.post("/create_login", async (req, res, next) => {
-  try {
-    const { username, password } = req.body; 
-
-    const result = await loginService.create_login(username, password);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-
 loginController.get("/verify-token", verifyToken, (req, res) => {
   res.status(200).json(req.user);
 });

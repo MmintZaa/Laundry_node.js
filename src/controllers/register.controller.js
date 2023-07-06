@@ -3,8 +3,9 @@ const User = require("../models/user.model");
 const verifyToken = require("../middlewares/verifyToken.middleware");
 const registerController = Router();
 const registerService = require("../services/register.service");
+const { validationResult } = require("express-validator");
 
-registerController.post("/register", validationEmail(), validationUsername(),
+registerController.post("/create",
   async (req, res, next) => {
     try {
       const validateResult = validationResult(req);
@@ -14,9 +15,9 @@ registerController.post("/register", validationEmail(), validationUsername(),
           additionValue: validateResult.array(),
         });
       }
-      console.log(validateResult);
-      const payload = req.body;
-      const result = await registerService.register(payload);
+   
+      //const payload = req.body;
+      const result = await registerService.register(req, res, next);
       res.status(200).json(result);
     } catch (error) {
       if (error.code === 11000) {
