@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 let validator = require("validator");
 const helpidcard = require("../helper/validate_IDcard");
 
-const register = async (payload) => {
+const users = async (payload) => {
     try {
       console.log('เข้า');
       let data = payload.body;
@@ -150,13 +150,9 @@ const register = async (payload) => {
       if (data.confirm_data = true) {
         await user.save();
         return "Creat Admin Success"
-      } else {   
-        console.log("fail")   
+      } else {     
         return "Failed";
       }
-
-
-
 
     } catch (error) {
       console.log('error' ,error)
@@ -164,9 +160,48 @@ const register = async (payload) => {
     }
   };
   
-  const registerService = {
-    register,
+  const get_all = async () => { 
+    try {      
+      const users = await User.find().select('firstname lastname id_card email clinic_name license_number objective');
+      let sum = 0;
+
+      users.forEach(i => {
+        sum ++;
+      });
+      return [true, "Success", sum, users]
+   // return await User.find();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  const update_users = async (upload) => {
+ 
+    try {
+      let data = upload;
+      let find_register = await User.findOne({
+        username: data.username,
+      });
+
+      if (!find_register) {
+        throw new Error( "Is Data not Found");
+      
+      } else {
+      const { firstname, lastname,id_card,email,clinic_name,license_number,objective } = data;
+      const user = await User.findOneAndUpdate({username:data.username}, { firstname, lastname,id_card,email,clinic_name,license_number,objective }, { new: true });
+      return [true, "Update Success"]       
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+  const userService = {
+    users,
+    get_all,
+    update_users,
   };
   
   
-  module.exports = registerService;
+  module.exports = userService;
