@@ -9,9 +9,11 @@ const register = async (payload) => {
       console.log('เข้า');
       let data = payload.body;
       console.log('username', data.username)
+      encryptedPassword = await bcrypt.hash(data.password, 10);
+
       let user = new User();
       user.username = data.username;
-      user.password = data.password;
+      user.password = encryptedPassword;
       user.firstname = data.firstname;
       user.lastname = data.lastname;
       user.id_card = data.id_card;
@@ -144,7 +146,7 @@ const register = async (payload) => {
         throw new Error( "invalid objective to create register"
         );
       }
-  
+
       if (data.confirm_data = true) {
         await user.save();
         return "Creat Admin Success"
@@ -152,6 +154,8 @@ const register = async (payload) => {
         console.log("fail")   
         return "Failed";
       }
+
+
 
 
     } catch (error) {
