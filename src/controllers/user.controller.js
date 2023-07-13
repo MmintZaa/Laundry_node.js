@@ -5,8 +5,7 @@ const userController = Router();
 const userService = require("../services/user.service");
 const { validationResult } = require("express-validator");
 
-userController.post("/create",
-  async (req, res, next) => {
+userController.post("/create", async (req, res, next) => {
     try {
       const validateResult = validationResult(req);
       if (!validateResult.isEmpty()) {
@@ -45,8 +44,7 @@ userController.get("/get_all", async (req, res, next) => {
   }
 });
 
-userController.get("/getId",
-  async (req, res, next) => {
+userController.get("/getId", async (req, res, next) => {
     try {    
       const user = req.body;
       const result = await userService.getId_users(user);
@@ -66,8 +64,7 @@ userController.get("/getId",
   }
 );
 
-userController.put("/update",
-  async (req, res, next) => {
+userController.put("/update", async (req, res, next) => {
     try {    
       const user = req.body;
       const result = await userService.update_users(user);
@@ -86,8 +83,7 @@ userController.put("/update",
   }
 );
 
-userController.delete("/delete",
-  async (req, res, next) => {
+userController.delete("/delete",async (req, res, next) => {
     try {    
       const user = req.body;
       const result = await userService.delete_users(user);
@@ -105,6 +101,35 @@ userController.delete("/delete",
     }
   }
 );
+
+
+userController.get("/getUserExcel", async (req, res, next) => {
+
+  try {
+    const validateResult = validationResult(req);
+    if (!validateResult.isEmpty()) {
+      return res.status(400).json({
+        message: "validation fail",
+        additionValue: validateResult.array(),
+      });
+    }
+ 
+    const payload = req.query;
+    const result = await userService.getUserExcel(payload);
+    res.status(200).json(result);
+  } catch (error) {
+    if (error.code === 11000) {
+      next(new Error("Duplicate Username"));
+    } else {
+      next(error);
+    }
+  }
+}
+  );
+
+
+
+
 
 
 module.exports = userController;
