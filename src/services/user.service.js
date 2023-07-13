@@ -188,7 +188,7 @@ const users = async (payload) => {
       
       } else {
       const { firstname, lastname,id_card,email,clinic_name,license_number,objective } = data;
-      const user = await User.findOneAndUpdate({username:data.username}, { firstname, lastname,id_card,email,clinic_name,license_number,objective }, { new: true });
+      await User.findOneAndUpdate({username:data.username}, { firstname, lastname,id_card,email,clinic_name,license_number,objective }, { new: true });
       return [true, "Update Success"]       
       }
     } catch (error) {
