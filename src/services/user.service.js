@@ -374,7 +374,7 @@ const users = async (payload) => {
     update_users,
     delete_users,
     getId_users,
-    getUserExcel,
+    getUserExcel
   };
   
   
