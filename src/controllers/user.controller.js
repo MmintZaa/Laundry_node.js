@@ -45,11 +45,32 @@ userController.get("/get_all", async (req, res, next) => {
   }
 });
 
+userController.get("/getId",
+  async (req, res, next) => {
+    try {    
+      const user = req.body;
+      const result = await userService.getId_users(user);
+      res.status(200).json({
+        status: result[0],
+        message: result[1],
+        data: result[2]          
+        })
+
+    } catch (error) {
+      if (error.code === 11000) {
+        next(new Error("Duplicate Username"));
+      } else {
+        next(error);
+      }
+    }
+  }
+);
+
 userController.put("/update",
   async (req, res, next) => {
     try {    
-      const maill = req.body;
-      const result = await userService.update_users(maill);
+      const user = req.body;
+      const result = await userService.update_users(user);
       res.status(200).json({
             status: result[0],
             message: result[1],           
@@ -64,19 +85,26 @@ userController.put("/update",
     }
   }
 );
-// userController.get("/current", verifyToken, async (req, res, next) => {
-//   try {
-//     const userId = req.user.userId;
-//     const result = await User.findOne({ userId });
-//     res.status(200).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
+userController.delete("/delete",
+  async (req, res, next) => {
+    try {    
+      const user = req.body;
+      const result = await userService.delete_users(user);
+      res.status(200).json({
+            status: result[0],
+            message: result[1],           
+        })
 
-// registerController.get("/verify-token", verifyToken, (req, res) => {
-//   res.status(200).json(req.user);
-// });
+    } catch (error) {
+      if (error.code === 11000) {
+        next(new Error("Duplicate Username"));
+      } else {
+        next(error);
+      }
+    }
+  }
+);
+
 
 module.exports = userController;

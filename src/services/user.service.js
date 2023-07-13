@@ -175,6 +175,28 @@ const users = async (payload) => {
     }
   }
 
+  const getId_users = async (id) => {
+ 
+    try { 
+   
+        let data = id;
+        let find_register = await User.findOne({
+          username: data.username,
+        });
+  
+        if (!find_register) {
+          throw new Error( "Is Data not Found");
+        
+        } else {  
+        const users = await User.findById(find_register) //.select('firstname lastname id_card email clinic_name license_number objective');       
+        return [true, "Success",  users]  
+        }         
+
+    } catch (error) {
+      throw error;
+    }  
+  }
+
   const update_users = async (upload) => {
  
     try {
@@ -196,11 +218,36 @@ const users = async (payload) => {
     }
   }
 
+  const delete_users = async (deload) => {
+ 
+    try {
+      let data = deload;
+      let find_register = await User.findOne({
+        username: data.username,
+      });
+
+      if (!find_register) {
+        throw new Error( "Is Data not Found");
+      
+      } else {
+      await User.findByIdAndDelete(find_register);
+      return [true, "Delete Success"]       
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+
+  
 
   const userService = {
     users,
     get_all,
     update_users,
+    delete_users,
+    getId_users,
   };
   
   
