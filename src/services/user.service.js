@@ -5,6 +5,8 @@ let validator = require("validator");
 let excel = require("excel4node");
 const helpidcard = require("../helper/validate_IDcard");
 const helper = require("../helper/valid_date");
+const moment = require('moment');
+
 
 const users = async (payload) => {
     try {
@@ -240,10 +242,10 @@ const users = async (payload) => {
     }
   }
 
-  const getUserExcel = async (exload) => {
+  const getUserExcel = async (req, res) => {
     try {
 
-      let data = exload;   
+      let data = req.query;   
       
       let pipeline = [];
   
@@ -316,7 +318,7 @@ const users = async (payload) => {
       let column = 1;
       //write header
       let header = [
-        "User_id",
+        //"User_id",
         "firstname",
         "id_card",
         "email",
@@ -336,19 +338,14 @@ const users = async (payload) => {
         column = 1;
         row++;
   
-        ws.cell(row, column++).string(bodyVal._id.toString()).style(styleLeft);
+        //ws.cell(row, column++).string(bodyVal._id.toString()).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.firstname).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.id_card).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.email).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.license_number).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.objective).style(styleLeft);
-        // let ts = bodyVal.createdAt;
-        // let date_time = new Date(ts);
-        // let date = date_time.getDate();
-        // let month = date_time.getMonth() + 1;
-        // let year = date_time.getFullYear();
-        // createAt = date + "/" + month + "/" + year;
+        
         createAt = helper.date_format(bodyVal.createdAt);
         ws.cell(row, column++).string(createAt.toString()).style(styleLeft);
       });
@@ -357,8 +354,7 @@ const users = async (payload) => {
         `template_data ${moment()
           .locale("th")
           .add(543, "year")
-          .format("DD MMMM YYYY h_mm_ss")}.xlsx`,
-        res
+          .format("DD MMMM YYYY h_mm_ss")}.xlsx`, res
       );   
 
     } catch (error) {

@@ -114,9 +114,9 @@ userController.get("/getUserExcel", async (req, res, next) => {
       });
     }
  
-    const payload = req.query;
-    const result = await userService.getUserExcel(payload);
-    res.status(200).json(result);
+
+    const result = await userService.getUserExcel(req, res);
+    return result
   } catch (error) {
     if (error.code === 11000) {
       next(new Error("Duplicate Username"));
