@@ -103,29 +103,29 @@ userController.delete("/delete",async (req, res, next) => {
 );
 
 
-// userController.get("/getUserExcel", async (req, res, next) => {
+userController.get("/getUserExcel", async (req, res, next) => {
 
-//   try {
-//     const validateResult = validationResult(req);
-//     if (!validateResult.isEmpty()) {
-//       return res.status(400).json({
-//         message: "validation fail",
-//         additionValue: validateResult.array(),
-//       });
-//     }
+  try {
+    const validateResult = validationResult(req);
+    if (!validateResult.isEmpty()) {
+      return res.status(400).json({
+        message: "validation fail",
+        additionValue: validateResult.array(),
+      });
+    }
  
-//     const payload = req.query;
-//     const result = await userService.getUserExcel(payload);
-//     res.status(200).json(result);
-//   } catch (error) {
-//     if (error.code === 11000) {
-//       next(new Error("Duplicate Username"));
-//     } else {
-//       next(error);
-//     }
-//   }
-// }
-// );
+    const payload = req.query;
+    const result = await userService.getUserExcel(payload);
+    res.status(200).json(result);
+  } catch (error) {
+    if (error.code === 11000) {
+      next(new Error("Duplicate Username"));
+    } else {
+      next(error);
+    }
+  }
+}
+);
 
 
 

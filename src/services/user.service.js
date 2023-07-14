@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 let validator = require("validator");
+let excel = require("excel4node");
 const helpidcard = require("../helper/validate_IDcard");
 
 const users = async (payload) => {
@@ -238,131 +239,132 @@ const users = async (payload) => {
     }
   }
 
-  // const getUserExcel = async (exload) => {
-  //   try {
+  const getUserExcel = async (exload) => {
+    try {
 
-  //     let data = exload;   
+      let data = exload;   
       
-  //     let pipeline = [];
+      let pipeline = [];
   
-  //     pipeline.push({
-  //       $sort: {
-  //         createdAt: 1,
-  //       },
-  //     });
+      pipeline.push({
+        $sort: {
+          createdAt: 1,
+        },
+      });
+      console.log(data.start_date)
   
-  //     const startDate = new Date(`${data.start_date}T00:00:00.000`);
-  //     const endDate = new Date(`${data.end_date}T23:59:59.999`);
+      const startDate = new Date(`${data.start_date}T00:00:00.000`);
+      const endDate = new Date(`${data.end_date}T23:59:59.999`);
   
-  //     if (data.start_date && data.end_date) {
-  //       pipeline.push({
-  //         $match: {
-  //           createdAt: {
-  //             $gte: startDate,
-  //             $lte: endDate,
-  //           },
-  //         },
-  //       });
-  //     } else if (data.start_date) {
-  //       pipeline.push({
-  //         $match: {
-  //           createdAt: {
-  //             $gte: startDate,
-  //           },
-  //         },
-  //       });
-  //     } else if (data.end_date && !data.start_date) {
-  //       pipeline.push({
-  //         $match: {
-  //           createdAt: {
-  //             $lte: endDate,
-  //           },
-  //         },
-  //       });
-  //     }
+      if (data.start_date && data.end_date) {
+        pipeline.push({
+          $match: {
+            createdAt: {
+              $gte: startDate,
+              $lte: endDate,
+            },
+          },
+        });
+      } else if (data.start_date) {
+        pipeline.push({
+          $match: {
+            createdAt: {
+              $gte: startDate,
+            },
+          },
+        });
+      } else if (data.end_date && !data.start_date) {
+        pipeline.push({
+          $match: {
+            createdAt: {
+              $lte: endDate,
+            },
+          },
+        });
+      }
   
-  //     let user = await User.aggregate(pipeline);
+      let user = await User.aggregate(pipeline);
   
-  //     const wb = new excel.Workbook({
-  //       defaultFont: {
-  //         size: 14,
-  //         name: "TH SarabunPSK",
-  //         color: "#000000",
-  //       },
-  //     });
+      const wb = new excel.Workbook({
+        defaultFont: {
+          size: 14,
+          name: "TH SarabunPSK",
+          color: "#000000",
+        },
+      });
   
-  //     const ws = wb.addWorksheet("users");
+      const ws = wb.addWorksheet("users");
   
-  //     let styleCenter = wb.createStyle({
-  //       alignment: {
-  //         wrapText: false,
-  //         horizontal: "center",
-  //       },
-  //       font: {
-  //         bold: true,
-  //       },
-  //     });
+      let styleCenter = wb.createStyle({
+        alignment: {
+          wrapText: false,
+          horizontal: "center",
+        },
+        font: {
+          bold: true,
+        },
+      });
   
-  //     let styleLeft = wb.createStyle({
-  //       alignment: {
-  //         wrapText: false,
-  //         horizontal: "left",
-  //       },
-  //     });
-  //     let row = 1;
-  //     let column = 1;
-  //     //write header
-  //     let header = [
-  //       "User_id",
-  //       "firstname",
-  //       "id_card",
-  //       "email",
-  //       "clinic_name",
-  //       "license_number",
-  //       "objective",
-  //       "created_at",
-  //     ];
+      let styleLeft = wb.createStyle({
+        alignment: {
+          wrapText: false,
+          horizontal: "left",
+        },
+      });
+      let row = 1;
+      let column = 1;
+      //write header
+      let header = [
+        "User_id",
+        "firstname",
+        "id_card",
+        "email",
+        "clinic_name",
+        "license_number",
+        "objective",
+        "created_at",
+      ];
   
-  //     let autoWidthColumnSize = [];
+      let autoWidthColumnSize = [];
   
-  //     header.forEach((headerVal) => {
-  //       ws.cell(row, column++).string(String(headerVal)).style(styleCenter);
-  //       autoWidthColumnSize.push(String(headerVal).length + 3);
-  //     });
-  //     user.forEach((bodyVal) => {
-  //       column = 1;
-  //       row++;
+      header.forEach((headerVal) => {
+        ws.cell(row, column++).string(String(headerVal)).style(styleCenter);
+        autoWidthColumnSize.push(String(headerVal).length + 3);
+      });
+      user.forEach((bodyVal) => {
+        column = 1;
+        row++;
   
-  //       ws.cell(row, column++).string(bodyVal._id.toString()).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.firstname).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.id_card).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.email).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.license_number).style(styleLeft);
-  //       ws.cell(row, column++).string(bodyVal.objective).style(styleLeft);
-  //       // let ts = bodyVal.createdAt;
-  //       // let date_time = new Date(ts);
-  //       // let date = date_time.getDate();
-  //       // let month = date_time.getMonth() + 1;
-  //       // let year = date_time.getFullYear();
-  //       // createAt = date + "/" + month + "/" + year;
-  //       createAt = helper.date_format(bodyVal.createdAt);
-  //       ws.cell(row, column++).string(createAt.toString()).style(styleLeft);
-  //     });
+        ws.cell(row, column++).string(bodyVal._id.toString()).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.firstname).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.id_card).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.email).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.license_number).style(styleLeft);
+        ws.cell(row, column++).string(bodyVal.objective).style(styleLeft);
+        // let ts = bodyVal.createdAt;
+        // let date_time = new Date(ts);
+        // let date = date_time.getDate();
+        // let month = date_time.getMonth() + 1;
+        // let year = date_time.getFullYear();
+        // createAt = date + "/" + month + "/" + year;
+        createAt = helper.date_format(bodyVal.createdAt);
+        ws.cell(row, column++).string(createAt.toString()).style(styleLeft);
+      });
   
-  //     return wb.write(
-  //       `template_data ${moment()
-  //         .locale("th")
-  //         .add(543, "year")
-  //         .format("DD MMMM YYYY h_mm_ss")}.xlsx`,
-  //       res
-  //     );   
+      return wb.write(
+        `template_data ${moment()
+          .locale("th")
+          .add(543, "year")
+          .format("DD MMMM YYYY h_mm_ss")}.xlsx`,
+        res
+      );   
 
-  //   } catch (error) {
-  //     console.log('error' ,error)
-  //     throw error;
-  //   }
-  // }
+    } catch (error) {
+      console.log('error' ,error)
+      throw error;
+    }
+  }
   
 
 
@@ -374,7 +376,7 @@ const users = async (payload) => {
     update_users,
     delete_users,
     getId_users,
-    // getUserExcel
+    getUserExcel
   };
   
   
