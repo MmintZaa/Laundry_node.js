@@ -14,6 +14,7 @@ const UserSchema = mongoose.Schema({
     license_number: { type: String, required: true },
     objective: { type: String},
     confirm_data: { type: Boolean, required: true },
+    token: { type: String },
 },
 {
   timestamps: true,

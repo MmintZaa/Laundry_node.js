@@ -150,14 +150,25 @@ const users = async (payload) => {
         throw new Error( "invalid objective to create register"
         );
       }
+  
+        const token = jwt.sign(
+          { user_id: user._id },
+          "test",
+          {
+            expiresIn: "2h",
+          }
+        );user.token = token;
 
-      if (data.confirm_data = true) {
+  
+        
+
+     if (data.confirm_data = true) {        
         await user.save();
-        return "Creat Admin Success"
+         return "Creat Admin Success"
       } else {     
         return "Failed";
       }
-
+    
     } catch (error) {
       console.log('error' ,error)
       throw error;
@@ -268,24 +279,25 @@ const users = async (payload) => {
             },
           },
         });
-      } else if (data.start_date) {
-        pipeline.push({
-          $match: {
-            createdAt: {
-              $gte: startDate,
-            },
-          },
-        });
-      } else if (data.end_date && !data.start_date) {
-        pipeline.push({
-          $match: {
-            createdAt: {
-              $lte: endDate,
-            },
-          },
-        });
       }
-  
+      // } else if (data.start_date) {
+      //   pipeline.push({
+      //     $match: {
+      //       createdAt: {
+      //         $gte: startDate,
+      //       },
+      //     },
+      //   });
+      // } else if (data.end_date && !data.start_date) {
+      //   pipeline.push({
+      //     $match: {
+      //       createdAt: {
+      //         $lte: endDate,
+      //       },
+      //     },
+      //   });
+      // }
+
       let user = await User.aggregate(pipeline);
   
       const wb = new excel.Workbook({
@@ -319,13 +331,13 @@ const users = async (payload) => {
       //write header
       let header = [
         //"User_id",
-        "firstname",
-        "id_card",
-        "email",
-        "clinic_name",
-        "license_number",
-        "objective",
-        "created_at",
+        "Name",   
+        "Id_card",
+        "Email",
+        "Clinic_name",
+        "License_number",
+        "Objective",
+        "Created_at",
       ];
   
       let autoWidthColumnSize = [];
@@ -338,8 +350,9 @@ const users = async (payload) => {
         column = 1;
         row++;
   
+        let name = bodyVal.firstname +" "+bodyVal.lastname;
         //ws.cell(row, column++).string(bodyVal._id.toString()).style(styleLeft);
-        ws.cell(row, column++).string(bodyVal.firstname).style(styleLeft);
+        ws.cell(row, column++).string(name.toString()).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.id_card).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.email).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
@@ -358,14 +371,10 @@ const users = async (payload) => {
       );   
 
     } catch (error) {
-      console.log('error' ,error)
+      console.log('error' ,error) 
       throw error;
     }
   }
-  
-
-
-
 
   const userService = {
     users,
