@@ -50,9 +50,9 @@ userController.get("/getId", async (req, res, next) => {
       const user = req.body;
       const token = String(req.headers.authorization).split(' ')[1]
       
-      console.log('token ', token)
+      //console.log('token ', token)
       const decoded = jwt.decode(token);
-      console.log(decoded);
+      //console.log(decoded);
       const result = await userService.getId_users(user);
       res.status(200).json({
         status: result[0],

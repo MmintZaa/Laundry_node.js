@@ -265,8 +265,7 @@ const users = async (payload) => {
           createdAt: 1,
         },
       });
-      console.log(data.start_date)
-  
+      
       const startDate = new Date(`${data.start_date}T00:00:00.000`);
       const endDate = new Date(`${data.end_date}T23:59:59.999`);
   
