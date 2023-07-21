@@ -22,8 +22,8 @@ const users = async (payload) => {
       user.lastname = data.lastname;
       user.id_card = data.id_card;
       user.email = data.email;
-      user.clinic_name = data.clinic_name;
-      user.license_number = data.license_number;
+      // user.clinic_name = data.clinic_name;
+      // user.license_number = data.license_number;
       user.objective = data.objective;
       user.confirm_data = data.confirm_data;
   
@@ -136,15 +136,15 @@ const users = async (payload) => {
 
 
 
-      if (!validator.contains(data.clinic_name)) {
-        throw new Error("invalid clinic name to create register"
-        );
-      }
+      // if (!validator.contains(data.clinic_name)) {
+      //   throw new Error("invalid clinic name to create register"
+      //   );
+      // }
   
-      if (!validator.contains(data.license_number)) {
-        throw new Error( "invalid license number to create register"
-        );
-      }
+      // if (!validator.contains(data.license_number)) {
+      //   throw new Error( "invalid license number to create register"
+      //   );
+      // }
   
       if (!validator.contains(data.objective)) {
         throw new Error( "invalid objective to create register"
@@ -177,7 +177,7 @@ const users = async (payload) => {
   
   const get_all = async () => { 
     try {      
-      const users = await User.find().select('firstname lastname id_card email clinic_name license_number objective');
+      const users = await User.find().select('firstname lastname id_card email objective');
       let sum = 0;
 
       users.forEach(i => {
@@ -203,7 +203,7 @@ const users = async (payload) => {
           throw new Error( "Is Data not Found");
         
         } else {  
-        const users = await User.findById(find_register) //.select('firstname lastname id_card email clinic_name license_number objective');       
+        const users = await User.findById(find_register).select('firstname lastname id_card email objective');       
         return [true, "Success",  users]  
         }         
 
@@ -224,8 +224,8 @@ const users = async (payload) => {
         throw new Error( "Is Data not Found");
       
       } else {
-      const { firstname, lastname,id_card,email,clinic_name,license_number,objective } = data;
-      await User.findOneAndUpdate({username:data.username}, { firstname, lastname,id_card,email,clinic_name,license_number,objective }, { new: true });
+      const { firstname, lastname,id_card,email,objective } = data;
+      await User.findOneAndUpdate({username:data.username}, { firstname, lastname,id_card,email,objective }, { new: true });
       return [true, "Update Success"]       
       }
     } catch (error) {
@@ -278,24 +278,24 @@ const users = async (payload) => {
             },
           },
         });
+      
+      } else if (data.start_date) {
+        pipeline.push({
+          $match: {
+            createdAt: {
+              $gte: startDate,
+            },
+          },
+        });
+      } else if (data.end_date && !data.start_date) {
+        pipeline.push({
+          $match: {
+            createdAt: {
+              $lte: endDate,
+            },
+          },
+        });
       }
-      // } else if (data.start_date) {
-      //   pipeline.push({
-      //     $match: {
-      //       createdAt: {
-      //         $gte: startDate,
-      //       },
-      //     },
-      //   });
-      // } else if (data.end_date && !data.start_date) {
-      //   pipeline.push({
-      //     $match: {
-      //       createdAt: {
-      //         $lte: endDate,
-      //       },
-      //     },
-      //   });
-      // }
 
       let user = await User.aggregate(pipeline);
   
@@ -333,8 +333,8 @@ const users = async (payload) => {
         "Name",   
         "Id_card",
         "Email",
-        "Clinic_name",
-        "License_number",
+        // "Clinic_name",
+        // "License_number",
         "Objective",
         "Created_at",
       ];
@@ -354,8 +354,8 @@ const users = async (payload) => {
         ws.cell(row, column++).string(name.toString()).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.id_card).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.email).style(styleLeft);
-        ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
-        ws.cell(row, column++).string(bodyVal.license_number).style(styleLeft);
+        // ws.cell(row, column++).string(bodyVal.clinic_name).style(styleLeft);
+        // ws.cell(row, column++).string(bodyVal.license_number).style(styleLeft);
         ws.cell(row, column++).string(bodyVal.objective).style(styleLeft);
         
         createAt = helper.date_format(bodyVal.createdAt);
